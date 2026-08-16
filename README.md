@@ -75,6 +75,11 @@ To optimize processing times during tracking loops, numerical properties are val
 1. **Iris Stutter-Step Adaptive Gate**: An efficient strong pseudoprime extraction mechanism utilizing a fixed-point constant pattern (`GOLDEN64`). It filters composite numbers quickly, avoiding complex math calculations on over 99% of variables.
 2. **Two-Coefficient Frobenius Test**: Survivor metrics pass down into full modular fast doubling blocks (`modfib` and `zpow_mod`), filtering structural pseudoprimes with highly accurate parity validation steps.
 
+<img width="490" height="664" alt="image" src="https://github.com/user-attachments/assets/af714e81-1a3d-46ef-82b0-416fe3147ee2" />
+<img width="422" height="194" alt="image" src="https://github.com/user-attachments/assets/29c8be90-36b3-4843-bb3b-1e02d70e1431" />
+<img width="662" height="700" alt="image" src="https://github.com/user-attachments/assets/bde75c2b-c9bc-4b4d-ba4b-bf2066e75f5b" />
+
+
 
 YOU MUST AGREE TO COPYRIGHT LICENSING FOR COMMERICAL USE OF ANY KIND!  PERSONAL USE IS ALSO VERY LIMITED!  JUST PAY ME FOR MY WORK!  DEMO ONLY!
 
