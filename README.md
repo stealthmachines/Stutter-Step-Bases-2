@@ -5,6 +5,8 @@ HDGL — FOUR-ELEMENT BARE-METAL Z[φ] SUBSTRATE WITH WU-WEI ORACLE
 * RUN:        qemu-system-x86_64 -drive format=raw,file=hdgl_wuwei.img -smp 4 -m 128M -boot c
 * RUFUS makes burning bootable images (.img) very simple!
 
+https://zchg.org/t/earth-air-fire-water/1051/8
+
 <img width="846" height="260" alt="image" src="https://github.com/user-attachments/assets/e465eae3-536a-474a-94ca-60e233946fd4" />
 
 A multi-core, bare-metal x86-64 mathematical simulation environment written in raw assembly language. It bypasses any standard operating system to execute numeric algorithms directly on the processor hardware.
