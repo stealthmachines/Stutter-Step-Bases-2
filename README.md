@@ -78,6 +78,49 @@ To optimize processing times during tracking loops, numerical properties are val
 <img width="490" height="664" alt="image" src="https://github.com/user-attachments/assets/af714e81-1a3d-46ef-82b0-416fe3147ee2" />
 <img width="422" height="194" alt="image" src="https://github.com/user-attachments/assets/29c8be90-36b3-4843-bb3b-1e02d70e1431" />
 <img width="662" height="700" alt="image" src="https://github.com/user-attachments/assets/bde75c2b-c9bc-4b4d-ba4b-bf2066e75f5b" />
+<img width="675" height="501" alt="image" src="https://github.com/user-attachments/assets/0ecdb998-5834-4c37-8d1c-9bab4cf9db9d" />
+<img width="673" height="624" alt="image" src="https://github.com/user-attachments/assets/167abe71-c496-4c3d-a108-1ebdd6a91edd" />
+2. The Cryptographic Hunt: Dual-Gate CostsTesting every single iteration for prime candidates using big-integer math slows down performance dramatically on raw hardware. To preserve throughput, the engine implements strict structural pacing:
+```
+                            [ FIRE Loop Iteration ]
+                                       │
+                                       ▼
+                       Is Iteration Counter (STATE_K) 
+                        Divisible by 128 (Stride)?
+                                  /         \
+                                YES          NO
+                                /             \
+                               ▼               ▼
+                ┌────────────────────────┐   ┌────────────────────────┐
+                │ Run Prime Test Engine  │   │ Bypass Prime Engine    │
+                │ (Compute Cost Applied) │   │ (Zero Overhead Applied)│
+                └───────────┬────────────┘   └───────────┬────────────┘
+                            │                            │
+                            └────────────┬───────────────┘
+                                         │
+                                         ▼
+                             [ Advance State Machine ]
+```
+
+By adding a throttling mask (test rax, 127), the compute cost is amortized across 128 baseline iterations, giving the system near-native baseline speeds [File: 4]. When a candidate lands on a stride tick, it runs through two nested gating architectures:Gate A: The Iris Pre-Filter (iris_prp_step)This filter drops over 99% of composite numbers at a highly optimized speed curve:Base Generation (iris_base): Costs exactly 2 standard integer multiplications (mul) to resolve a pseudo-random Weyl equidistribution base via GOLDEN64.Strong Pseudo-Prime Test (strong_sprp): Executes a plain scalar modular exponentiation loop (modpow_u64). In the worst-case scenario, this takes up to 16 sequential probes (IRIS_MAX_PROBES). Each probe runs a binary square-and-multiply loop that costs roughly \(\log_2(P)\) steps. Each step requires a heavy mul (128-bit product) and an div (64-bit hardware division) instruction.
+
+<img width="676" height="640" alt="image" src="https://github.com/user-attachments/assets/6d39938b-a493-4d23-9b03-660430202fba" />
+<img width="673" height="197" alt="image" src="https://github.com/user-attachments/assets/0bcb3b10-7ff3-4b92-8a42-291db940c858" />
+
+```
+                       True Mathematical Value (Exceeds 64-bits)
+                                      │
+                                      ▼
+             1 ┌────────────────────────────────────────────────┐
+               │ 00000000 00000000 00000000 00000000 000005C2 │ (Dropped Lower Data)
+               └────────────────────────────────────────────────┘
+               ▲
+               │
+       [ Hardware Carry Flag (CF = 1) ] -> Ignored by native 'add' instruction
+```
+
+<img width="642" height="122" alt="image" src="https://github.com/user-attachments/assets/29ddb4b4-d739-4a94-9fbb-da80b4b4e573" />
+<img width="668" height="563" alt="image" src="https://github.com/user-attachments/assets/718e93af-3f8a-46eb-80bc-8f1bc39be88f" />
 
 
 
