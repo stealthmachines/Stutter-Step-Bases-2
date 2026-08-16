@@ -82,8 +82,7 @@ To optimize processing times during tracking loops, numerical properties are val
 <img width="673" height="624" alt="image" src="https://github.com/user-attachments/assets/167abe71-c496-4c3d-a108-1ebdd6a91edd" />
 2. The Cryptographic Hunt: Dual-Gate CostsTesting every single iteration for prime candidates using big-integer math slows down performance dramatically on raw hardware. To preserve throughput, the engine implements strict structural pacing:
 
-```
-```
+
                             [ FIRE Loop Iteration ]
                                        │
                                        ▼
@@ -102,8 +101,7 @@ To optimize processing times during tracking loops, numerical properties are val
                                          │
                                          ▼
                              [ Advance State Machine ]
-```
-```
+
 
 By adding a throttling mask (test rax, 127), the compute cost is amortized across 128 baseline iterations, giving the system near-native baseline speeds [File: 4]. When a candidate lands on a stride tick, it runs through two nested gating architectures:Gate A: The Iris Pre-Filter (iris_prp_step)This filter drops over 99% of composite numbers at a highly optimized speed curve:Base Generation (iris_base): Costs exactly 2 standard integer multiplications (mul) to resolve a pseudo-random Weyl equidistribution base via GOLDEN64.Strong Pseudo-Prime Test (strong_sprp): Executes a plain scalar modular exponentiation loop (modpow_u64). In the worst-case scenario, this takes up to 16 sequential probes (IRIS_MAX_PROBES). Each probe runs a binary square-and-multiply loop that costs roughly \(\log_2(P)\) steps. Each step requires a heavy mul (128-bit product) and an div (64-bit hardware division) instruction.
 
